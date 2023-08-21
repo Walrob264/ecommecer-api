@@ -1,6 +1,8 @@
 const request = require("supertest");
 const app = require("../app");
 
+require("../models");
+
 const URL_CATEGORY = "/api/v1/categories";
 const URL_USERS = "/api/v1/users";
 let TOKEN;
