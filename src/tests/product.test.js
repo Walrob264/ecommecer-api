@@ -1,6 +1,7 @@
 const request = require("supertest");
 const app = require("../app");
 const Category = require("../models/Category");
+const ProductImg = require("../models/ProductImg");
 require("../models");
 
 const URL_PRODUCTS = "/api/v1/products";
@@ -9,6 +10,7 @@ let TOKEN;
 let product;
 let category;
 let productId;
+let image;
 
 beforeAll(async () => {
   const user = {
@@ -45,7 +47,7 @@ test("'POST -> 'URL_PRODUCTS' shoul return status code 201 and res.body.title ==
   expect(res.body.title).toBe(product.title);
 });
 
-test("Get -> 'URL_PRODUCTS' shoul return status code 200 and res.body.length === 1", async () => {
+test("GET ALL -> 'URL_PRODUCTS' shoul return status code 200 and res.body.length === 1", async () => {
   const res = await request(app).get(URL_PRODUCTS);
 
   expect(res.status).toBe(200);
@@ -55,7 +57,7 @@ test("Get -> 'URL_PRODUCTS' shoul return status code 200 and res.body.length ===
   expect(res.body[0].category.id).toBe(category.id);
 });
 
-test("Get -> 'URL_PRODUCTS?category=id' shoul return status code 200 and res.body.length === 1, res.body[0].category to Be Defined res.body[0].category = category.id", async () => {
+test("GET ONE -> 'URL_PRODUCTS?category=id' shoul return status code 200 and res.body.length === 1, res.body[0].category to Be Defined res.body[0].category = category.id", async () => {
   const res = await request(app).get(`${URL_PRODUCTS}?category=${category.id}`);
 
   expect(res.status).toBe(200);
@@ -84,6 +86,23 @@ test("PUT -> 'URL_PRODUCTS' shoul return status code 201 and res.body.title === 
   expect(res.status).toBe(200);
   expect(res.body).toBeDefined();
   expect(res.body.title).toBe(productUpdate.title);
+});
+
+test("'POST -> 'URL_PRODUCTS/:id/images' shoul return status code 200 and res.body.length === 1", async () => {
+  const imageBody = {
+    url: "lorem",
+    filename: "lorem",
+  };
+
+  image = await ProductImg.create(imageBody);
+  const res = await request(app)
+    .post(`${URL_PRODUCTS}/${productId}/images`)
+    .send([image.id])
+    .set("Authorization", `Bearer ${TOKEN}`);
+
+  expect(res.status).toBe(200);
+  expect(res.body).toBeDefined();
+  expect(res.body).toHaveLength(1);
 });
 
 test("DElETE -> 'URL_PRODUCTS/:id', should resturn status code 204 ", async () => {
