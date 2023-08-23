@@ -5,7 +5,7 @@ const {
   remove,
   update,
   setImage,
-} = require("../controllers/product.controllers");
+} = require("../controllers/product.controller");
 const express = require("express");
 const { verifyJwt } = require("../utils/verifyJWT");
 

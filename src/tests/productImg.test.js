@@ -40,7 +40,7 @@ test("GET ALL -> 'URL_PRODUCT_IMAGES', should status code 200 and res.body.lengt
   expect(res.body).toHaveLength(1);
 });
 
-test("DELTE -> 'URL_PRODUCT_IMAGES/:id', should status code 204", async () => {
+test("DELETE -> 'URL_PRODUCT_IMAGES/:id', should status code 204", async () => {
   const res = await request(app)
     .delete(`${URL_PRODUCT_IMAGES}/${imageId}`)
     .set("Authorization", `Bearer ${TOKEN}`);
